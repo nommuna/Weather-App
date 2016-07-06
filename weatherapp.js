@@ -1,4 +1,3 @@
-var jsonurl = "http://api.openweathermap.org/data/2.5/weather?q=Redlands&units=imperial&APPID=5eea63b2ee3505c58713d9149832d4c5";
 
 $(function (){
     var $temp = $('#numberTemp');
@@ -10,14 +9,10 @@ $(function (){
     var $pressure = $('#pressure');
     var $mintemp = $('#mintemp');
     var $maxtemp = $('#maxtemp');
-    var date = [];
-    var datetemp =[];
+    var $avgname = $('#avgname');
 
-
-    $('#inputtxt').keyup(function(event){
-        if (event.keyCode == 13) {
-            $('#submitbtn').click();
-
+    $('#submitbtn').click(function(event){
+        $("#tableinfo").show(1000);
         var location = $('#inputtxt').val();
         $.ajax({
             type: 'GET',
@@ -32,73 +27,94 @@ $(function (){
                 $pressure.html('<td>'+data.main.pressure+'</td>');
                 $mintemp.html('<td>'+data.main.temp_min+'</td>');
                 $maxtemp.html('<td>'+data.main.temp_max+'</td>');
+                $avgname.html('<h2>'+data.name+' Averages</h2>');
             }
-
-
         });
-
         $.ajax({
             type: 'GET',
-            url: "http://api.openweathermap.org/data/2.5/forecast?q=Redlands,us&mode=json&units=imperial&cnt=20&APPID=5eea63b2ee3505c58713d9149832d4c5",
+            url: "http://api.openweathermap.org/data/2.5/forecast?q="+location+",us&mode=json&units=imperial&cnt=20&APPID=5eea63b2ee3505c58713d9149832d4c5",
+            dataType: 'json',
             success: function(data){
-                //console.log(data.list[0].main.temp);
-            //trying to parse through data for graph
+                //console.log(data.list[].main.temp);
+                //trying to parse through data for graph
+                var numtemp = [];
+                var numdate = [];
+                    $.each(data.list,function(index, data){
+                        //numtemp = [];
+                        numtemp.push(data.main.temp);
+                        numdate.push(data.dt_txt);
+                    });
+                    //console.log(numdate);
 
+                var ctx = document.getElementById("myChart");
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: numdate,
+                        datasets: [{
+                            label: 'Average temp',
+                            data: numtemp,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)',
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)',
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)',
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
 
+                            ],
+                            borderColor: [
+                                'rgba(255,99,132,1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)',
+                                'rgba(255,99,132,1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)',
+                                'rgba(255,99,132,1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)',
+                                'rgba(255,99,132,1)',
+                                'rgba(54, 162, 235, 1)',
+
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero:true
+                                }
+                            }]
+                        }
+                    }
+                });
+                //
             }
-
-
         });
-
-    }
     });
-// For the graph data
-var ctx = document.getElementById("myChart");
-var myChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-        datasets: [{
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255,99,132,1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
-        }]
-    },
-    options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero:true
-                }
-            }]
-        }
-    }
 });
-
-
-});
-
-/**
-$.each(data,function(index, data){
-    if (index === "main") {
-        $temp.append('<h2>'+data.temp+'</h2>');
-    }
-
-});
-**/
