@@ -3,6 +3,8 @@ A one page app that shows the weather of any city.
 
 Started this little porject to practice working with API's. Was able to use jquery and AJAX to pull data from an api and display it.
 
+Demo: http://nommuna.github.io/WeatherApp/index.html
+
 Tools used:
 
 1. HTML, CSS
