@@ -11,4 +11,4 @@ Tools used:
 2. Javascript/ Jquery
 3. Sass
 4. Api from https://openweathermap.org/
-5. Chart.js for interactive and stylish Visualization
+5. Chart.js for interactive and stylish visualization of data
